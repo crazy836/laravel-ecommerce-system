@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -108,6 +107,11 @@ Route::resource('orders', App\Http\Controllers\OrderController::class)->only(['i
 Route::get('/test', function () {
     return 'Test route working';
 });
+
+// Include health check routes
+if (file_exists(base_path('routes/health.php'))) {
+    include base_path('routes/health.php');
+}
 
 // Admin routes
 Route::prefix('admin')->name('admin.')->middleware(['admin'])->group(function () {
