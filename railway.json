@@ -9,6 +9,6 @@
     "restartPolicyMaxRetries": 10
   },
   "postDeploy": {
-    "command": "php artisan migrate --force"
+    "command": "chmod +x migrate.sh && ./migrate.sh"
   }
 }
