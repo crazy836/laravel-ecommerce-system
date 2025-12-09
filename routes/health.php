@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/health', function () {
     try {
@@ -26,6 +27,24 @@ Route::get('/health', function () {
             'status' => 'ERROR',
             'database' => 'Disconnected',
             'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ], 500);
+    }
+});
+
+// TEMPORARY: Route to run migrations
+Route::get('/migrate', function () {
+    try {
+        Artisan::call('migrate', ['--force' => true]);
+        return response()->json([
+            'status' => 'SUCCESS',
+            'message' => 'Migrations completed successfully',
+            'output' => Artisan::output()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'ERROR',
+            'message' => $e->getMessage(),
             'trace' => $e->getTraceAsString()
         ], 500);
     }
