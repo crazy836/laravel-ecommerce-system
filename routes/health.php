@@ -6,11 +6,17 @@ use Illuminate\Support\Facades\Artisan;
 
 Route::get('/health', function () {
     try {
+        // Check storage permissions
+        $storageWritable = is_writable(storage_path());
+        $bootstrapCacheWritable = is_writable(app()->bootstrapPath('cache'));
+        
         // Simple health check without database
         return response()->json([
             'status' => 'OK',
             'message' => 'Application is running',
-            'timestamp' => now()->toISOString()
+            'timestamp' => now()->toISOString(),
+            'storage_writable' => $storageWritable,
+            'bootstrap_cache_writable' => $bootstrapCacheWritable
         ]);
     } catch (\Exception $e) {
         return response()->json([
