@@ -6,6 +6,23 @@ use Illuminate\Support\Facades\Artisan;
 
 Route::get('/health', function () {
     try {
+        // Simple health check without database
+        return response()->json([
+            'status' => 'OK',
+            'message' => 'Application is running',
+            'timestamp' => now()->toISOString()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'ERROR',
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ], 500);
+    }
+});
+
+Route::get('/health-db', function () {
+    try {
         // Test database connection
         DB::connection()->getPdo();
         
@@ -20,7 +37,7 @@ Route::get('/health', function () {
             'status' => 'OK',
             'database' => 'Connected',
             'environment' => $envInfo,
-            'message' => 'Application is running successfully'
+            'message' => 'Application and database are running successfully'
         ]);
     } catch (\Exception $e) {
         return response()->json([
