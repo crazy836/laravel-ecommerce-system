@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Simple test route at the top to verify basic functionality
+Route::get('/test-basic', function () {
+    return response()->json(['status' => 'OK', 'message' => 'Basic route working']);
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
